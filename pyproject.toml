@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geosink"
+description = "Geodesic Sinkhorn with Chebyshev approximation"
+requires-python = ">=3.8"
+dynamic = ["version"]
+readme = {file = "README.md", content-type = "text/markdown"}
+license = {file = "LICENSE"}
+authors = [
+    {name = "Guillaume Huguet"}
+]
+dependencies = [
+    "scipy",
+    "numpy",
+]
+keywords = [
+    "diffusion",
+    "optimal transport",
+    "heat",
+    "kernel",
+    "sinkhorn",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "pylint",
+    "pytest",
+    "isort",
+    "scanpy",
+    "pygsp",
+    "pytest-memray",
+]
+graph = [
+    "scanpy",
+    "pygsp",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools_scm]
+
+[tool.black]
+line-length = 80
+target-version = ["py38"]
