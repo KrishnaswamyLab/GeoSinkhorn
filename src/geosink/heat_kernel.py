@@ -86,14 +86,17 @@ class HeatFilter:
         heat_kernel[heat_kernel < 0] = 0.0
         return heat_kernel
 
-    def __call__(self, b):
+    def __call__(self, b, safe_zeros=True):
 
         if self.method == "cheb_pygsp":
-            return self._filter.filter(b, order=self.order)
+            diff = self._filter.filter(b, order=self.order)
 
         elif self.method == "cheb":
             diff = expm_multiply(self.lap, b, self.coeff, self.phi)
-            return diff
 
         elif self.method in ["lowrank", "exact"]:
-            return self._filter @ b
+            diff = self._filter @ b
+
+        if safe_zeros:
+            diff[diff < 0.0] = 0.0
+        return diff

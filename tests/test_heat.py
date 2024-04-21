@@ -6,7 +6,7 @@ from scipy.sparse import rand
 
 DEVICES = ["cpu"]
 
-def gt_heat_kernel_knn(
+def gt_heat_kernel_data(
     data,
     t,
     sigma,
@@ -49,7 +49,7 @@ def test_heat_kernel_gaussian(t, order, method):
     assert np.all(heat_kernel >= 0)
 
     # test if the heat kernel is close to the ground truth
-    gt_heat_kernel = gt_heat_kernel_knn(data, t=t, sigma=1.0)
+    gt_heat_kernel = gt_heat_kernel_data(data, t=t, sigma=1.0)
     assert np.allclose(heat_kernel, gt_heat_kernel, atol=1e-1, rtol=1e-1)
 
 @pytest.mark.limit_memory("800 MB")
