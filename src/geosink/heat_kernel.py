@@ -59,7 +59,7 @@ class HeatFilter:
 
         elif method == "lowrank":
             self.lap.shape[0]
-            eval, evec = scipy.sparse.linalg.eigsh(self.lap, k=order, which="SM")
+            eval, evec = eigsh(self.lap, k=order, which="SM")
             self._filter = evec @ np.diag(np.exp(-self.tau * eval)) @ evec.T
 
         elif method == "exact":

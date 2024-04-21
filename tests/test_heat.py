@@ -1,6 +1,8 @@
 import pytest
 import numpy as np
 from geosink.heat_kernel import HeatFilter, laplacian_from_data
+import scipy
+from scipy.sparse import rand
 
 DEVICES = ["cpu"]
 
@@ -50,6 +52,19 @@ def test_heat_kernel_gaussian(t, order, method):
     gt_heat_kernel = gt_heat_kernel_knn(data, t=t, sigma=1.0)
     assert np.allclose(heat_kernel, gt_heat_kernel, atol=1e-1, rtol=1e-1)
 
+@pytest.mark.limit_memory("800 MB")
+def test_sparse_heat_kernel():
+    t = 5.0
+    order = 10
+    adj = rand(10_000, 10_000, density=0.0001, format="coo", dtype=np.float32)
+    lap = scipy.sparse.csgraph.laplacian(adj, symmetrized=False)
+
+    heat_op = HeatFilter(lap=lap, tau=t, order=order, method="cheb")
+    signal = np.random.uniform(0, 1, (10_000,1))
+    signal = signal / signal.sum()
+    diffused_signal = heat_op(signal)
+
+    np.testing.assert_array_equal(np.isfinite(diffused_signal), True)
 
 if __name__ == "__main__":
     pytest.main([__file__])
