@@ -4,8 +4,6 @@ from geosink.heat_kernel import HeatFilter, laplacian_from_data
 import scipy
 from scipy.sparse import rand
 
-DEVICES = ["cpu"]
-
 def gt_heat_kernel_data(
     data,
     t,
