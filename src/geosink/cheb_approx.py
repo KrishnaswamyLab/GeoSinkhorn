@@ -15,9 +15,15 @@ def compute_chebychev_coeff_all_torch(eigval, t, K):
         out = 2.0 * ive(torch.arange(0, K + 1), -t * eigval)
     return out
 
-def compute_chebychev_coeff_all(eigval, t, K):
-    return 2.0 * ive(np.arange(0, K + 1,), -t * eigval)
 
+def compute_chebychev_coeff_all(eigval, t, K):
+    return 2.0 * ive(
+        np.arange(
+            0,
+            K + 1,
+        ),
+        -t * eigval,
+    )
 
 
 def expm_multiply(
@@ -27,7 +33,7 @@ def expm_multiply(
     eigval: np.ndarray,
 ):
     """Matrix exponential with Chebyshev polynomial approximation."""
-    
+
     def body(carry, c):
         T0, T1, Y = carry
         T2 = (2.0 / eigval) * (L @ T1) - 2.0 * T1 - T0

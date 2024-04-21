@@ -1,10 +1,11 @@
-
-import scipy
-import numpy as np
-import scipy.sparse.linalg
 from typing import Any, Callable, Optional
-from geosink.cheb_approx import expm_multiply, compute_chebychev_coeff_all
+
+import numpy as np
+import scipy
+import scipy.sparse.linalg
 from scipy.sparse.linalg import eigsh
+
+from geosink.cheb_approx import compute_chebychev_coeff_all, expm_multiply
 
 try:
     import pygsp
@@ -14,13 +15,17 @@ except ImportError:
 EPS_LOG = 1e-6
 EPS_HEAT = 1e-4
 
+
 def norm_sym_laplacian(A: np.array):
     deg = A.sum(axis=1)
     deg_sqrt_inv = np.diag(1.0 / np.sqrt(deg + EPS_LOG))
     return deg_sqrt_inv @ A @ deg_sqrt_inv
 
+
 def laplacian_from_data(data: np.array, sigma: float, alpha: int = 20):
-    affinity = np.exp(-(scipy.spatial.distance.cdist(data, data) / (2 * sigma))**alpha)
+    affinity = np.exp(
+        -((scipy.spatial.distance.cdist(data, data) / (2 * sigma)) ** alpha)
+    )
     return norm_sym_laplacian(affinity)
 
 
@@ -35,27 +40,35 @@ class HeatFilter:
         order: int,  # Degree or numver of steps
         method: str,  # filter `" cheb_pygsp"`, `"cheb"`, `"lowrank"`, `"exact"`.
         graph: Optional[Any] = None,  # Graph object
-        lap : Optional[np.array] = None,  # Laplacian matrix
+        lap: Optional[np.array] = None,  # Laplacian matrix
     ) -> Callable:
         self.graph = graph
         self.tau = tau
         self.order = order
         self.method = method
 
-        assert (graph is not None) or (lap is not None), "Either graph or lap must be provided."
+        assert (graph is not None) or (
+            lap is not None
+        ), "Either graph or lap must be provided."
         self.lap = graph.L if lap is None else lap
 
         if method not in self._valid_methods:
-            raise ValueError("method must be one of {}".format(self._valid_methods))
+            raise ValueError(
+                "method must be one of {}".format(self._valid_methods)
+            )
 
         if method == "cheb_pygsp":
-            assert graph is not None, "graph must be provided for method cheb_pygsp"
+            assert (
+                graph is not None
+            ), "graph must be provided for method cheb_pygsp"
             graph.estimate_lmax()
             self._filter = pygsp.filters.Heat(graph, tau)
 
         elif method == "cheb":
             self.phi = eigsh(self.lap, k=1, return_eigenvectors=False)[0] / 2
-            self.coeff = compute_chebychev_coeff_all(self.phi, self.tau, self.order)
+            self.coeff = compute_chebychev_coeff_all(
+                self.phi, self.tau, self.order
+            )
 
         elif method == "lowrank":
             self.lap.shape[0]
@@ -73,14 +86,17 @@ class HeatFilter:
         heat_kernel[heat_kernel < 0] = 0.0
         return heat_kernel
 
-    def __call__(self, b):
+    def __call__(self, b, safe_zeros=True):
 
         if self.method == "cheb_pygsp":
-            return self._filter.filter(b, order=self.order)
+            diff = self._filter.filter(b, order=self.order)
 
         elif self.method == "cheb":
             diff = expm_multiply(self.lap, b, self.coeff, self.phi)
-            return diff
- 
+
         elif self.method in ["lowrank", "exact"]:
-            return self._filter @ b
+            diff = self._filter @ b
+
+        if safe_zeros:
+            diff[diff < 0.0] = 0.0
+        return diff
