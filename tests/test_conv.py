@@ -14,7 +14,7 @@ def test_conv_sinkhorn(order, num_iter, tau):
     lap = laplacian_from_data(data, sigma=1.0)
     conv_sinkhorn = ConvSinkhorn(tau=tau, order=order, method="cheb", lap=lap)
     m_0 = np.random.rand(1000,)
-    m_0[:5 00] = 0
+    m_0[:500] = 0
     m_0 = m_0 / np.sum(m_0)
     m_1 = np.random.rand(1000,)
     m_1[500:] = 0
@@ -40,3 +40,26 @@ def test_sparse_conv_sinkhorn():
     assert kl >= 0
     assert np.all(np.isfinite(v))
     assert np.all(np.isfinite(w))
+
+def test_gaussian():
+    # random normal data
+    data0 = np.random.normal(0, 1, (100, 5))
+    data1 = np.random.normal(5, 1, (100, 5))
+    data2 = np.random.normal(10, 1, (100, 5))
+    data = np.concatenate([data0, data1, data2], axis=0)
+    lap = laplacian_from_data(data, sigma=1.0)
+    conv_sinkhorn = ConvSinkhorn(tau=1.0, order=10, method="cheb", lap=lap)
+    m_0 = np.zeros(300,)
+    m_0[:100] = 1
+    m_0 = m_0 / np.sum(m_0)
+    m_1 = np.zeros(300,)
+    m_1[100:200] = 1
+    m_1 = m_1 / np.sum(m_1)
+    m_2 = np.zeros(300,)
+    m_2[200:] = 1
+    kl = conv_sinkhorn(m_0, m_1, max_iter=500)
+    kl2 = conv_sinkhorn(m_0, m_2, max_iter=500)
+    assert kl2 > kl
+
+if __name__ == "__main__":
+    pytest.main([__file__])
