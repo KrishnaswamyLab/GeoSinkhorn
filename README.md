@@ -36,7 +36,7 @@ conv_sinkhorn = ConvSinkhorn(tau=1.0, order=10, method="cheb", lap=lap)
 
 # create two signals
 m_0 = np.zeros(200,)
-m_0[:200] = 1
+m_0[:100] = 1
 m_0 = m_0 / np.sum(m_0)
 m_1 = np.zeros(200,)
 m_1[100:] = 1
@@ -47,3 +47,22 @@ dist_w = conv_sinkhorn(m_0, m_1, max_iter=500)
 print(dist_w)
 ```
 Note that it is also possible to provide a graph instance directly to the `ConvSinkhorn` class with `ConvSinkhorn(tau=1.0, order=10, method="cheb", graph=graph)`. The `graph` must have a Laplacian attribute `graph.L`. We suggest using a sparse Laplacian (e.g. in COO format) for better performance.
+
+### How to Cite
+
+If you find this code useful in your research, please cite the following paper (expand for BibTeX):
+<details>
+<summary>
+Huguet, G., Tong, A., Zapatero, M. R., Tape, C. J., Wolf, G., & Krishnaswamy, S. (2023). Geodesic sinkhorn for fast and accurate optimal transport on manifolds. In 2023 IEEE 33rd International Workshop on Machine Learning for Signal Processing (MLSP).
+</summary>
+
+```bibtex
+@inproceedings{huguet2023geodesic,
+  title={Geodesic sinkhorn for fast and accurate optimal transport on manifolds},
+  author={Huguet, Guillaume and Tong, Alexander and Zapatero, Mar{\'\i}a Ramos and Tape, Christopher J and Wolf, Guy and Krishnaswamy, Smita},
+  booktitle={2023 IEEE 33rd International Workshop on Machine Learning for Signal Processing (MLSP)},
+  pages={1--6},
+  year={2023},
+  organization={IEEE}
+}
+```
