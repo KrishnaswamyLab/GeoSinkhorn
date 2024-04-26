@@ -3,7 +3,7 @@ import numpy as np
 from geosink.heat_kernel import HeatFilter
 
 
-class ConvSinkhorn:
+class GeoSinkhorn:
     def __init__(self, tau, order, method, graph=None, lap=None):
         assert (graph is not None) or (
             lap is not None
