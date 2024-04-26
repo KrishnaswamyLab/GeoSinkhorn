@@ -53,12 +53,12 @@ Note that it is also possible to provide a graph instance directly to the `GeoSi
 If you find this code useful in your research, please cite the following paper (expand for BibTeX):
 <details>
 <summary>
-Huguet, G., Tong, A., Zapatero, M. R., Tape, C. J., Wolf, G., & Krishnaswamy, S. (2023). Geodesic sinkhorn for fast and accurate optimal transport on manifolds. In 2023 IEEE 33rd International Workshop on Machine Learning for Signal Processing (MLSP).
+Huguet, G., Tong, A., Zapatero, M. R., Tape, C. J., Wolf, G., & Krishnaswamy, S. (2023). Geodesic Sinkhorn for fast and accurate optimal transport on manifolds. In 2023 IEEE 33rd International Workshop on Machine Learning for Signal Processing (MLSP).
 </summary>
 
 ```bibtex
 @inproceedings{huguet2023geodesic,
-  title={Geodesic sinkhorn for fast and accurate optimal transport on manifolds},
+  title={Geodesic Sinkhorn for fast and accurate optimal transport on manifolds},
   author={Huguet, Guillaume and Tong, Alexander and Zapatero, Mar{\'\i}a Ramos and Tape, Christopher J and Wolf, Guy and Krishnaswamy, Smita},
   booktitle={2023 IEEE 33rd International Workshop on Machine Learning for Signal Processing (MLSP)},
   pages={1--6},
