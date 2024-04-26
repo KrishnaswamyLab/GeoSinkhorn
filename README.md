@@ -8,11 +8,11 @@ You can install the library from [PyPI](https://pypi.org/project/geosink/) by ru
 ```bash
 pip install geosink
 ``` 
-Or Using Git, by first cloning repository and running:
+Or using Git, by first cloning the repository and running:
 ```bash
 pip install -e .
 ```
-or if you want to use the pre existing graph tools, run:
+If you want to use the pre existing graph tools, run:
 ```bash
 pip install -e .['graph']
 ```
