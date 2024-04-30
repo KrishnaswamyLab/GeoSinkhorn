@@ -1,7 +1,8 @@
 # GeoSinkhorn
 Code for the paper Geodesic Sinkhorn for Fast and Accurate Optimal Transport on Manifolds. 
 
-**Note**: This repository is still in development.
+> [!NOTE]  
+>This repository is still in development.
 
 ### Installation
 You can install the library from [PyPI](https://pypi.org/project/geosink/) by running:
