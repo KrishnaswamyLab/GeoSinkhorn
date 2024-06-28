@@ -19,7 +19,8 @@ EPS_HEAT = 1e-4
 def norm_sym_laplacian(A: np.array):
     deg = A.sum(axis=1)
     deg_sqrt_inv = np.diag(1.0 / np.sqrt(deg + EPS_LOG))
-    return deg_sqrt_inv @ A @ deg_sqrt_inv
+    id = np.eye(A.shape[0])
+    return id - deg_sqrt_inv @ A @ deg_sqrt_inv
 
 
 def laplacian_from_data(data: np.array, sigma: float, alpha: int = 20):
